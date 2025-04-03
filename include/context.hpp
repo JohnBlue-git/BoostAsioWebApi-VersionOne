@@ -13,8 +13,8 @@ private:
 
 public:
   Context(const Context&) = delete;
-  Context& operator=(const Context&) = delete;
   Context(Context&& other) = delete;
+  Context& operator=(const Context&) = delete;
   Context& operator=(Context&& other) = delete;
 public:
   Context() {}
@@ -25,9 +25,10 @@ public:
   http::response<http::string_body>& getResponse();
 
   // Add more functionality as needed, such as setting response status, headers,
-  // etc. For example, a helper function to easily set the response result and
-  // body
+  // etc. For example, a helper function to easily set the response result and body
   void setJsonResponse(http::status status, const std::string &body);
 
-  //void setJsonRequest( ? , const std::string &body);
+  // Add more functionality as needed, such as setting headers,
+  // etc. For example, a helper function to easily set the request body
+  void setJsonRequest( ? , const std::string &body) = delete;
 };

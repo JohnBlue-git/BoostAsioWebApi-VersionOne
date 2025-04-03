@@ -27,6 +27,6 @@ public:
   std::shared_ptr<IController> getController(const std::string &URL);
 
 private:
-	bool isURL(const std::string &URL);
-	std::string removeId(const std::string& URL);
+  bool isURL(const std::string &URL);
+  std::string removeId(const std::string& URL);
 };

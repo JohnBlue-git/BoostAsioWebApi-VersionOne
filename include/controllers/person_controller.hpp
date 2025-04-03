@@ -16,7 +16,7 @@ public:
   PersonController& operator=(PersonController&& other) = delete;
 public:
   PersonController(std::shared_ptr<IPersonService> service)
-      : personService(service) {}
+    : personService(service) {}
   virtual ~PersonController() {}
 
 public:

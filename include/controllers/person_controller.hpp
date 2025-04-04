@@ -1,6 +1,5 @@
 #pragma once
 
-#include "interface_controller.hpp"
 #include "abstract_controller.hpp"
 #include "../serializers/person_serializer.hpp"
 #include "../services/person_service.hpp"
@@ -43,5 +42,4 @@ private:
   //
   void handleDeleteCollection(std::shared_ptr<Context> ctx);
   void handleDeleteById(std::shared_ptr<Context> ctx, int id);
-  
 };

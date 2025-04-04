@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_server.hpp"
+#include "interface_controller.hpp"
 
 class AbstractController : public IController {
 public:

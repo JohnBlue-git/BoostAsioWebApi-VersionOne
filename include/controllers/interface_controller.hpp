@@ -25,10 +25,10 @@ using tcp = net::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 #define DELETE (http::verb::delete_)
 
 class IController {
-private:
-  std::unordered_map<std::string, std::function(void(std::shared_ptr<Context> ctx))> method;
+protected:
+  std::unordered_map<std::string, std::function<void(std::shared_ptr<Context> ctx)>> method;
 
 public:
-  bool existsId(const http::request<http::string_body>& req, int* id) = 0;
+  virtual bool existsId(const http::request<http::string_body>& req, int* id) = 0;
   virtual void handleRequest(std::shared_ptr<Context> ctx) = 0;
 };

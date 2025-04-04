@@ -1,6 +1,6 @@
 #include "abstract_controller.hpp"
 
-bool AbstarctController::existsId(const http::request<http::string_body>& req, int* id)
+bool AbstractController::existsId(const http::request<http::string_body>& req, int* id)
 {
   try
   {
@@ -21,9 +21,9 @@ bool AbstarctController::existsId(const http::request<http::string_body>& req, i
   }
 }
 
-void AbstarctController::handleRequest(std::shared_ptr<Context> ctx)
+void AbstractController::handleRequest(std::shared_ptr<Context> ctx)
 {
-    std::function(void(std::shared_ptr<Context> ctx)) callback;
+    std::function<void(std::shared_ptr<Context> ctx)> callback;
     const http::request<http::string_body>& req = ctx->getRequest();
     switch (req.method())
     {

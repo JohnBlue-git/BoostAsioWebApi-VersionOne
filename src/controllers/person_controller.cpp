@@ -1,8 +1,8 @@
 #include "person_controller.hpp"
 
-void PersonController::handleRequest(Context& ctx)
+void PersonController::handleRequest(std::shared_ptr<Context> ctx)
 {
-  const http::request<http::string_body>& req = ctx.getRequest();
+  const http::request<http::string_body>& req = ctx->getRequest();
 
   const std::string path(req.target());
   std::smatch matches;
@@ -41,7 +41,7 @@ void PersonController::handleRequest(Context& ctx)
     jsonStr = "{\"error\": \"Method not found.\"}";
   }
 
-  ctx.setJsonResponse(status, jsonStr);
+  ctx->setJsonResponse(status, jsonStr);
 }
 
 std::tuple<http::status, std::string> PersonController::getPersons()

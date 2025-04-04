@@ -66,12 +66,11 @@ AbstractServer::~AbstractServer() {
 }
 
 void AbstractServer::session(tcp::socket socket) {
+  auto ctx = std::make_shared<Context>();
+  http::request<http::string_body>& req = ctx->getRequest();
+  http::response<http::string_body>& res = ctx->getResponse();
   try
   {
-    Context ctx;
-    http::request<http::string_body>& req = ctx.getRequest();
-    http::response<http::string_body>& res = ctx.getResponse();
-
     beast::flat_buffer buffer;
     http::read(socket, buffer, req);
 
@@ -81,7 +80,9 @@ void AbstractServer::session(tcp::socket socket) {
       router->getController(path)->handleRequest(ctx);
     }
     else {
-      ctx.setJsonResponse(http::status::not_found, "{\"error\": \"Resource not found.\"}");
+      ctx.setJsonResponse(
+        http::status::not_found,
+        "{\"error\": \"Resource not found.\"}");
     }
 
     http::write(socket, res);

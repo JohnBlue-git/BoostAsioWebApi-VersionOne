@@ -9,18 +9,16 @@ private:
   std::shared_ptr<IPersonService> personService;
 
 public:
-  PersonController() = delete;
-  PersonController(const PersonController&) = delete;
-  PersonController& operator=(const PersonController&) = delete;
-  PersonController(PersonController&& other) = delete;
-  PersonController& operator=(PersonController&& other) = delete;
-public:
   PersonController(std::shared_ptr<IPersonService> service)
     : personService(service) {}
   virtual ~PersonController() {}
-
 public:
-  void handleRequest(Context& ctx) override;
+  PersonController() = delete;
+  PersonController(const PersonController&) = delete;
+  PersonController(PersonController&& other) = delete;
+public:
+  PersonController& operator=(const PersonController&) = delete;
+  PersonController& operator=(PersonController&& other) = delete;
 
 private:
   std::tuple<http::status, std::string> getPersons();

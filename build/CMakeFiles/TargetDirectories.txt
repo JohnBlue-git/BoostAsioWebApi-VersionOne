@@ -1,3 +1,0 @@
-/workspaces/BoostAsioWebApi-VersionOne/build/CMakeFiles/rebuild_cache.dir
-/workspaces/BoostAsioWebApi-VersionOne/build/CMakeFiles/edit_cache.dir
-/workspaces/BoostAsioWebApi-VersionOne/build/CMakeFiles/WebApi.dir

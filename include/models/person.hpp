@@ -15,4 +15,7 @@ public:
   unsigned int getId() const;
   std::string getName() const;
   unsigned int getAge() const;
+public:
+  void setName(std::string);
+  void setAge(unsigned int);
 };

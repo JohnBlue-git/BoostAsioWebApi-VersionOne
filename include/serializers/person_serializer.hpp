@@ -29,9 +29,9 @@ class PersonSerializer {
 public:
 #if defined(BOOST_JSON)
   static boost::json::object toJson(const Person &person);
-  static Person fromJson(const boost::json::object &obj);
+  static std::optional<Person> fromJson(const boost::json::object &obj);
 #else
   static nlohmann::json toJson(const Person &person);
-  static Person fromJson(const nlohmann::json &obj);
+  static std::optional<Person> fromJson(const nlohmann::json &obj);
 #endif
 };

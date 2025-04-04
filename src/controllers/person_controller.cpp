@@ -1,133 +1,95 @@
 #include "person_controller.hpp"
 
-void handleGetCollection(std::shared_ptr<Context> ctx)
-{
-  const http::request<http::string_body>& req = ctx->getRequest();
+//
+// GET
+//
 
+void PersonController::handleGetCollection(std::shared_ptr<Context> ctx)
+{
   http::status status;
   std::string jsonStr;
+
+  auto persons = personService->getAllPersons();
+
+#ifdef BOOST_JSON
+  boost::json::array jsonArray;
+  for (const auto &person : persons) {
+    jsonArray.push_back(PersonSerializer::toJson(person));
+  }
+  jsonStr = boost::json::serialize(jsonArray);
+  status = http::status::ok;
+#else
+  nlohmann::json jsonArray;
+  for (const auto &person : persons) {
+    jsonArray.push_back(PersonSerializer::toJson(person));
+  }
+  jsonStr = jsonArray.dump();
+  status = http::status::ok;
+#endif
+
+  ctx->setJsonResponse(status, jsonStr);
 }
 
-void handleGetById(std::shared_ptr<Context> ctx, int id)
+void PersonController::handleGetById(std::shared_ptr<Context> ctx, int id)
 {
-  const http::request<http::string_body>& req = ctx->getRequest();
-
   http::status status;
   std::string jsonStr;
-}
 
-void handleGet(std::shared_ptr<Context> ctx)
-{
+  auto person = personService->getPersonById(id);
 
-  int id = 0;
-  if (true == existsId(req, &id))
+  if (std::nullopt == person)
   {
-    handleGetById(ctx, id);
+    status = http::status::not_found;
+    jsonStr = "{\"error\": \"Person not found.\"}";
   }
   else
   {
-    handleGetCollection(ctx);
-  }
-}
-
-void handlePost(std::shared_ptr<Context> ctx)
-{}
-
-void handlePut(std::shared_ptr<Context> ctx)
-{}
-
-void handlePatch(std::shared_ptr<Context> ctx)
-{}
-
-void handleDelete(std::shared_ptr<Context> ctx)
-{}
-
-
-
-
-
-
-
-
-
-void PersonController::handleRequest(std::shared_ptr<Context> ctx)
-{
-  const http::request<http::string_body>& req = ctx->getRequest();
-
-  const std::string path(req.target());
-  std::smatch matches;
-  std::regex pattern(R"(^/[^/]+(?:/[^/]+)?(?:/(\d+))?$)");
-  std::regex_match(path, matches, pattern);
-
-  http::status status;
-  std::string jsonStr;
-
-  if (matches[1].matched) // Check if ID exists
-  {
-    int id = std::stoi(matches[1]); // Extracting the {id}
-
-
-
-    if (req.method() == GET) {
-        std::tie(status, jsonStr) = PersonController::getPersonById(id);
-      }
-      else if (req.method() == DELETE) {
-        std::tie(status, jsonStr) = PersonController::deletePersonById(id);
-      }
-      //else if (req.method() == PUT) {
-      //	PersonController::putPersonById(req, id);
-      //}
-      else {
-        status = http::status::not_found;
-        jsonStr = "{\"error\": \"Method not found.\"}";
-      }
-  }
-  else if (req.method() == GET) {
-    std::tie(status, jsonStr) = PersonController::getPersons();
-  }
-  else if (req.method() == POST) {
-    std::tie(status, jsonStr) = PersonController::createPerson(req);
-  }
-  else {
-    status = http::status::not_found;
-    jsonStr = "{\"error\": \"Method not found.\"}";
+#ifdef BOOST_JSON
+    status = http::status::ok;
+    jsonStr = boost::json::serialize(PersonSerializer::toJson(person.value()));
+#else
+    status = http::status::ok;
+    jsonStr = PersonSerializer::toJson(person.value()).dump();
+#endif
   }
 
   ctx->setJsonResponse(status, jsonStr);
 }
 
-std::tuple<http::status, std::string> PersonController::getPersons()
+void PersonController::handleGet(std::shared_ptr<Context> ctx)
 {
-  std::string jsonString;
+  const http::request<http::string_body>& req = ctx->getRequest();
 
-  try
+  int id = 0;
+  if (true == AbstractController::existsId(req, &id))
   {
-    auto persons = personService->getAllPersons();
-#ifdef BOOST_JSON
-    boost::json::array jsonArray;
-    for (const auto &person : persons) {
-      jsonArray.push_back(PersonSerializer::toJson(person));
-    }
-    jsonString = boost::json::serialize(jsonArray);
-#else
-    nlohmann::json jsonArray;
-    for (const auto &person : persons) {
-      jsonArray.push_back(PersonSerializer::toJson(person));
-    }
-    jsonString = jsonArray.dump();
-#endif
-
-    return { http::status::ok, jsonString };
+    PersonController::handleGetById(ctx, id);
   }
-  catch (const std::exception &e)
+  else
   {
-    return { http::status::internal_server_error, "{\"error\": \"Failed to serialize persons.\"}" };
+    PersonController::handleGetCollection(ctx);
   }
 }
 
-std::tuple<http::status, std::string> PersonController::createPerson(const http::request<http::string_body>& req)
+//
+// POST
+//
+
+void PersonController::handlePost(std::shared_ptr<Context> ctx)
 {
-  try
+  const http::request<http::string_body>& req = ctx->getRequest();
+
+  http::status status;
+  std::string jsonStr;
+
+  int id = 0;
+  if (true == AbstractController::existsId(req, &id))
+  {
+    // shall replace with correct status code
+    status = http::status::not_found;
+    jsonStr = "{\"error\": \"POST should not have request with id.\"}";
+  }
+  else
   {
 #ifdef BOOST_JSON
     auto json = boost::json::parse(req.body());
@@ -136,59 +98,133 @@ std::tuple<http::status, std::string> PersonController::createPerson(const http:
     auto json = nlohmann::json::parse(req.body());
     auto person = PersonSerializer::fromJson(json);
 #endif
-
-    personService->addPerson(person);
-
-    return { http::status::created, "{\"success\": \"Person created.\"}" };
-  }
-  catch (const std::exception &e)
-  {
-    return { http::status::bad_request, "{\"error\": \"Invalid JSON payload.\"}" };
-  }
-}
-
-std::tuple<http::status, std::string> PersonController::getPersonById(int id) {
-  std::string jsonString;
-
-  try
-  {
-    auto person = personService->getPersonById(id);
-
-    if (person)
+    if (std::nullopt == person)
     {
-  #ifdef BOOST_JSON
-      jsonString = boost::json::serialize(PersonSerializer::toJson(person.value()));
-  #else
-      jsonString = PersonSerializer::toJson(person.value()).dump();
-  #endif
-
-      return { http::status::ok, jsonString };
+      status = http::status::bad_request;
+      jsonStr = "{\"error\": \"Invalid JSON payload.\"}";
     }
     else
     {
-      return { http::status::not_found, "{\"error\": \"Person not found.\"}" };
+      personService->addPerson(person);
+
+      status = http::status::created;
+      jsonStr = "{\"success\": \"Person created.\"}";
     }
   }
-  catch (const std::exception &e)
-  {
-    return { http::status::internal_server_error, "{\"error\": \"Failed to serialize persons.\"}" };
-  }
+
+  ctx->setJsonResponse(status, jsonStr);
 }
 
-std::tuple<http::status, std::string> PersonController::deletePersonById(int id) {
+//
+// PUT
+//
 
-  try {
-    if (personService->deletePersonById(id))
+void PersonController::handlePut(std::shared_ptr<Context> ctx)
+{}
+
+//
+// PATCH
+//
+
+void PersonController::handlePatch(std::shared_ptr<Context> ctx)
+{
+  const http::request<http::string_body>& req = ctx->getRequest();
+
+  http::status status;
+  std::string jsonStr;
+
+  int id = 0;
+  if (true == AbstractController::existsId(req, &id))
+  {
+    std::optional<std::string> name;
+    std::optional<unsigned int> age;
+
+#ifdef BOOST_JSON
+    if (obj.if_contains("name"))
     {
-      return { http::status::no_content, "" };
+      name = obj.at("name").as_string().c_str();
+    }
+    if (obj.if_contains("age"))
+    {
+      age = obj.at("age").as_int64();
+    }
+#else
+    if (obj.contains("name"))
+    {
+      name = obj["name"];
+    }
+    if (obj.contains("age"))
+    {
+      age = obj["age"];
+    }
+#endif
+
+    if (personService->patchPerson(id, name, age))
+    {
+      status = http::status::ok;
+      jsonStr = "{\"success\": \"Person patched.\"}";
     }
     else
     {
-      return { http::status::not_found, "{\"error\": \"Person not found.\"}" };
+      status = http::status::not_found;
+      jsonStr = "{\"error\": \"Person not found.\"}";
     }
   }
-  catch (const std::exception &e)
+  else
   {
-    return { http::status::internal_server_error, "{\"error\": \"Failed to delete person.\"}" };
+    status = http::status::bad_request;
+    jsonStr = "{\"error\": \"PATCH should have request with id.\"}";
+  }
+
+  ctx->setJsonResponse(status, jsonStr);
+}
+
+//
+// DELETE
+//
+
+void PersonController::handleDeleteCollection(std::shared_ptr<Context> ctx)
+{
+  http::status status;
+  std::string jsonStr;
+
+  personService->deletePersons();
+  status = http::status::no_content
+  jsonStr = "";
+
+  ctx->setJsonResponse(status, jsonStr);
+}
+
+void PersonController::handleDeleteById(std::shared_ptr<Context> ctx, int id)
+{
+  http::status status;
+  std::string jsonStr;
+
+  if (personService->deletePersonById(id))
+  {
+    status = http::status::no_content
+    jsonStr = "";
+  }
+  else
+  {
+    status = http::status::not_found
+    jsonStr = "{\"error\": \"Person not found.\"}";
+  }
+
+  ctx->setJsonResponse(status, jsonStr);
+}
+
+void PersonController::handleDelete(std::shared_ptr<Context> ctx)
+{
+  const http::request<http::string_body>& req = ctx->getRequest();
+
+  int id = 0;
+  if (true == AbstractController::existsId(req, &id))
+  {
+    PersonController::handleDeleteById(ctx, id);
+  }
+  else
+  {
+    PersonController::handleDeleteCollection(ctx);
   }
 }

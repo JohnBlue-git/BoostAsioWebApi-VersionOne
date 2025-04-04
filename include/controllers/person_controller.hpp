@@ -39,4 +39,9 @@ private:
 private:
   void handleGetCollection(std::shared_ptr<Context> ctx);
   void handleGetById(std::shared_ptr<Context> ctx, int id);
+  //
+  //
+  void handleDeleteCollection(std::shared_ptr<Context> ctx);
+  void handleDeleteById(std::shared_ptr<Context> ctx, int id);
+  
 };

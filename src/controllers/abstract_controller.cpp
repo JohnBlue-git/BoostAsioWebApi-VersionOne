@@ -27,28 +27,29 @@ void AbstarctController::handleRequest(std::shared_ptr<Context> ctx)
     const http::request<http::string_body>& req = ctx->getRequest();
     switch (req.method())
     {
-        case GET:
-            callback = method["GET"];
-            break;
-        case POST:
-            callback = method["POST"];
-            break;
-        case PUT:
-            callback = method["PUT"];
-            break;
-        case PATCH:
-            callback = method["PATCH"];
-            break;
-        case DELETE:
-            callback = method["DELETE"];
-            break;
-        default:
-            status = http::status::not_found; // shall correct this code 
-            jsonStr = "{\"error\": \"Method not support.\"}";
-            return;
+      case GET:
+        callback = method["GET"];
+        break;
+      case POST:
+        callback = method["POST"];
+        break;
+      case PUT:
+        callback = method["PUT"];
+        break;
+      case PATCH:
+        callback = method["PATCH"];
+        break;
+      case DELETE:
+        callback = method["DELETE"];
+        break;
+      default:
+        // shall replace with correct status code
+        ctx->setJsonResponse(
+          http::status::not_found,
+          "{\"error\": \"Method not support.\"}");
     }
     if (callback)
     {
-        callback(ctx);
+      callback(ctx);
     }
 }

@@ -29,5 +29,6 @@ private:
   std::unordered_map<std::string, std::function(void(std::shared_ptr<Context> ctx))> method;
 
 public:
+  bool existsId(const http::request<http::string_body>& req, int* id) = 0;
   virtual void handleRequest(std::shared_ptr<Context> ctx) = 0;
 };

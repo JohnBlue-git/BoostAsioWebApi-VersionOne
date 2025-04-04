@@ -30,5 +30,5 @@ public:
 
   // Add more functionality as needed, such as setting headers,
   // etc. For example, a helper function to easily set the request body
-  void setJsonRequest( ? , const std::string &body) = delete;
+  //void setJsonRequest( ? , const std::string &body) = delete;
 };

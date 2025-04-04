@@ -13,7 +13,6 @@ public:
     }
     virtual ~AbstractController() {}
 public:
-    AbstractController() = delete;
     AbstractController(const AbstractController&) = delete;
     AbstractController(AbstractController&& other) = delete;
 public:
@@ -21,5 +20,6 @@ public:
     AbstractController& operator=(AbstractController&& other) = delete;
 
 public:
+    bool existsId(const http::request<http::string_body>& req, int* id) override;
     void handleRequest(std::shared_ptr<Context> ctx) override;
 };

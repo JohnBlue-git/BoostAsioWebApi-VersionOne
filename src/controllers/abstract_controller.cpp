@@ -1,5 +1,26 @@
 #include "abstract_controller.hpp"
 
+bool AbstarctController::existsId(const http::request<http::string_body>& req, int* id)
+{
+  try
+  {
+    const std::string path(req.target());
+    std::smatch matches;
+    std::regex pattern(R"(^/[^/]+(?:/[^/]+)?(?:/(\d+))?$)");
+    std::regex_match(path, matches, pattern);
+    if (matches[1].matched) 
+    {
+      *id = std::stoi(matches[1]);
+      return true;
+    }
+    return false;
+  }
+  catch(std::exception e)
+  {
+    return false;
+  }
+}
+
 void AbstarctController::handleRequest(std::shared_ptr<Context> ctx)
 {
     std::function(void(std::shared_ptr<Context> ctx)) callback;

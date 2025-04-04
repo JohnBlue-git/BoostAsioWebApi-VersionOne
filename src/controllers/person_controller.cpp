@@ -1,5 +1,55 @@
 #include "person_controller.hpp"
 
+void handleGetCollection(std::shared_ptr<Context> ctx)
+{
+  const http::request<http::string_body>& req = ctx->getRequest();
+
+  http::status status;
+  std::string jsonStr;
+}
+
+void handleGetById(std::shared_ptr<Context> ctx, int id)
+{
+  const http::request<http::string_body>& req = ctx->getRequest();
+
+  http::status status;
+  std::string jsonStr;
+}
+
+void handleGet(std::shared_ptr<Context> ctx)
+{
+
+  int id = 0;
+  if (true == existsId(req, &id))
+  {
+    handleGetById(ctx, id);
+  }
+  else
+  {
+    handleGetCollection(ctx);
+  }
+}
+
+void handlePost(std::shared_ptr<Context> ctx)
+{}
+
+void handlePut(std::shared_ptr<Context> ctx)
+{}
+
+void handlePatch(std::shared_ptr<Context> ctx)
+{}
+
+void handleDelete(std::shared_ptr<Context> ctx)
+{}
+
+
+
+
+
+
+
+
+
 void PersonController::handleRequest(std::shared_ptr<Context> ctx)
 {
   const http::request<http::string_body>& req = ctx->getRequest();
@@ -15,6 +65,8 @@ void PersonController::handleRequest(std::shared_ptr<Context> ctx)
   if (matches[1].matched) // Check if ID exists
   {
     int id = std::stoi(matches[1]); // Extracting the {id}
+
+
 
     if (req.method() == GET) {
         std::tie(status, jsonStr) = PersonController::getPersonById(id);

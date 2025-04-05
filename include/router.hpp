@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <boost/beast.hpp>
 
-#include "../include/controllers/person_controller.hpp"
+#include "../include/controllers/person/person_controller.hpp"
 
 namespace http = boost::beast::http;
 

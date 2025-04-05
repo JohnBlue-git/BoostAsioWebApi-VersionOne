@@ -12,54 +12,72 @@ There is a Version Zero on my github. The Version Zero remains the original code
 ### Tree view
 ```console
 ├── CMakeLists.txt
+├── PERSON.md
+├── README.md
+├── doc
+│   ├── webapi_project.drawio
+│   └── webapi_project.png
 ├── include
 │   ├── context.hpp
 │   ├── controllers
 │   │   ├── abstract_controller.hpp
 │   │   ├── interface_controller.hpp
-│   │   ├── ...
-│   │   └── person_controller.hpp
+│   │   ├── ... other service's controller ...
+│   │   └── person
+│   │       └── person_controller.hpp
 │   ├── models
-│   │   ├── ...
-│   │   └── person.hpp
+│   │   ├── ... other service's model ...
+│   │   └── person
+│   │       └── person.hpp
 │   ├── router.hpp
 │   ├── serializers
 │   │   ├── nlohmann
-│   │   │   ├── json_fwd.hpp
-│   │   │   └── json.hpp
-│   │   ├── ...
-│   │   └── person_serializer.hpp
+│   │   │   ├── json.hpp
+│   │   │   └── json_fwd.hpp
+│   │   ├── ... other service's serilizer ...
+│   │   └── person
+│   │       └── person_serializer.hpp
 │   ├── server
 │   │   ├── abstract_server.hpp
 │   │   ├── async_accept_server.hpp
 │   │   ├── block_accept_server.hpp
 │   │   └── interface_server.hpp
 │   └── services
-│       └── person_service.hpp
-├── README.md
+│   │   ├── ... other service's service ...
+│       └── person
+│           └── person_service.hpp
+├── meson.build
+├── meson.options
 ├── src
 │   ├── context.cpp
 │   ├── controllers
 │   │   ├── abstract_controller.cpp
-│   │   ├── ...
-│   │   └── person_controller.cpp
+│   │   ├── ... other service's controller ...
+│   │   └── person
+│   │       └── person_controller.cpp
 │   ├── main.cpp
 │   ├── models
-│   │   ├── ...
-│   │   └── person.cpp
+│   │   ├── ... other service's model ...
+│   │   └── person
+│   │       └── person.cpp
 │   ├── router.cpp
 │   ├── serializers
-│   │   ├── ...
-│   │   └── person_serializer.cpp
+│   │   ├── ... other service's serilizer ...
+│   │   └── person
+│   │       └── person_serializer.cpp
 │   ├── server
 │   │   ├── abstract_server.cpp
 │   │   ├── async_accept_server.cpp
 │   │   └── block_accept_server.cpp
 │   └── services
-│       ├── ...
-│       └── person_service.cpp
+│   │   ├── ... other service's service ...
+│       └── person
+│           └── person_service.cpp
 └── tests
     ├── README.md
+    ├── __pycache__
+    │   └── test_api_person.cpython-312-pytest-8.3.5.pyc
+    ├── install_with_python3-xyz.sh
     ├── requirements.txt
     └── test_api_person.py
 ```
@@ -67,7 +85,19 @@ There is a Version Zero on my github. The Version Zero remains the original code
 ### Composition Relationship
 ![composition relationship](doc/webapi_project.png)
 
-## Pre-installation
+## Tips for git
+```console
+git status
+git add .
+git reset build/
+git status
+git commit -m "<message>"
+git push
+```
+
+## How to buid and run
+
+### Pre-installation
 reference about install boost library (if your kernel unable install boost library easily)
 https://askubuntu.com/questions/806478/xenial-16-04-cannot-find-package-libboost-all-dev
 ```console
@@ -83,8 +113,6 @@ sudo apt search libboost
 # or
 dpkg -s libboost-dev | grep 'Version'
 ```
-
-## How to buid and run
 
 ### Build with cmake
 ```console

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../models/person.hpp"
+#include "../../models/person/person.hpp"
 
 class IPersonService {
 public:

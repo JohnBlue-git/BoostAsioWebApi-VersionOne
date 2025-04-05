@@ -14,16 +14,23 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 # Include header
 include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/server
   ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers
   ${CMAKE_CURRENT_SOURCE_DIR}/include/models
   ${CMAKE_CURRENT_SOURCE_DIR}/include/serializers
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/server
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services
+  )
+include_directories(WebApi PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers/person
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/models/person
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/serializers/person
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/services/person
   )
 # Source code
 file(GLOB SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*/*.cpp
   )
 # Executable
 add_executable(WebApi ${SOURCES})

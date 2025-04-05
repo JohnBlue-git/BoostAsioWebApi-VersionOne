@@ -23,7 +23,7 @@ Community and Documentation: nlohmann::json has extensive documentation and a la
   #include "nlohmann/json.hpp"
 #endif
 
-#include "../models/person.hpp"
+#include "../models/person/person.hpp"
 
 class PersonSerializer {
 public:

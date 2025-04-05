@@ -26,21 +26,16 @@ inc_dir = include_directories(
   'include/models',
   'include/serializers'
 )
+inc_dir = include_directories(
+  'include/person/controllers',
+  'include/person/services',
+  'include/person/models',
+  'include/person/serializers'
+)
 
 # Source files
-sources = files(
-  'src/main.cpp',
-  'src/context.cpp',
-  'src/router.cpp',
-  'src/server/abstract_server.cpp',
-  'src/server/async_accept_server.cpp',
-  'src/server/block_accept_server.cpp',
-
-  'src/controllers/person_controller.cpp',
-  'src/services/person_service.cpp',
-  'src/models/person.cpp',
-  'src/serializers/person_serializer.cpp'
-)
+# Use glob to find all .cpp files recursively
+sources = files('src/**/*.cpp')
 # append in subdir via subdir('...')
 # .../meson.build
 # sources += files(...)

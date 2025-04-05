@@ -1,8 +1,8 @@
 #pragma once
 
 #include "abstract_controller.hpp"
-#include "../serializers/person_serializer.hpp"
-#include "../services/person_service.hpp"
+#include "../serializers/person/person_serializer.hpp"
+#include "../services/person/person_service.hpp"
 
 class PersonController : public AbstractController {
 private:

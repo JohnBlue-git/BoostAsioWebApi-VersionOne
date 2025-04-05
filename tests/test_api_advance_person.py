@@ -5,7 +5,7 @@ import subprocess
 import time
 
 BASE_URL = 'http://localhost:1999'
-PERSON_API = '/api/person'
+PERSON_API = '/api/advance_person'
 
 @pytest.fixture(scope="session", autouse=True)
 def start_and_stop_program():

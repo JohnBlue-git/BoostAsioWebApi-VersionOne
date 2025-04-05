@@ -13,14 +13,14 @@ void PersonController::handleGetCollection(std::shared_ptr<Context> ctx)
 
 #ifdef BOOST_JSON
   boost::json::array jsonArray;
-  for (const auto &person : persons) {
+  for (const auto& person : persons) {
     jsonArray.push_back(PersonSerializer::toJson(person));
   }
   jsonStr = boost::json::serialize(jsonArray);
   status = http::status::ok;
 #else
   nlohmann::json jsonArray;
-  for (const auto &person : persons) {
+  for (const auto& person : persons) {
     jsonArray.push_back(PersonSerializer::toJson(person));
   }
   jsonStr = jsonArray.dump();

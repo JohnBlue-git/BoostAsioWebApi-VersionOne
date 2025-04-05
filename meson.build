@@ -27,10 +27,13 @@ inc_dir = include_directories(
   'include/serializers'
 )
 inc_dir = include_directories(
-  'include/person/controllers',
-  'include/person/services',
-  'include/person/models',
-  'include/person/serializers'
+  'include/controllers/person',
+  'include/services/person',
+  'include/models/person',
+  'include/serializers/person'
+)
+inc_dir = include_directories(
+  'include/services/advance_person',
 )
 
 # Source files

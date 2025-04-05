@@ -28,10 +28,10 @@ Community and Documentation: nlohmann::json has extensive documentation and a la
 class PersonSerializer {
 public:
 #if defined(BOOST_JSON)
-  static boost::json::object toJson(const Person &person);
-  static std::optional<Person> fromJson(const boost::json::object &obj);
+  static boost::json::object toJson(const Person& person);
+  static std::optional<Person> fromJson(const boost::json::object& obj);
 #else
-  static nlohmann::json toJson(const Person &person);
-  static std::optional<Person> fromJson(const nlohmann::json &obj);
+  static nlohmann::json toJson(const Person& person);
+  static std::optional<Person> fromJson(const nlohmann::json& obj);
 #endif
 };

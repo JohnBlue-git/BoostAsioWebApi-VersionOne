@@ -5,10 +5,12 @@
 #include <semaphore.h>
 
 #include "router.hpp"
-#include "person_service.hpp"
-#include "person_controller.hpp"
 #include "block_accept_server.hpp"
 #include "async_accept_server.hpp"
+
+#include "person_service.hpp"
+#include "advance_person_service.hpp"
+#include "person_controller.hpp"
 
 //
 // Fence
@@ -38,13 +40,20 @@ sem_t Fence::semaphore; // Initialize static member
 int main(void)
 {
   try {
-    // Crear services
+    // Create services
+    //
     auto personService = std::make_shared<PersonService>();
     auto personController = std::make_shared<PersonController>(personService);
+    //
+    auto advance_personService = std::make_shared<AdvancePersonService>();
+    auto advance_personController = std::make_shared<PersonController>(advance_personService);
     
     // Register routing
     auto router = std::make_shared<Router>();
+    //
     router->addRoute("/api/person", personController);
+    //
+    router->addRoute("/api/advance_person", advance_personController);
 
     // Create server
 #if defined(ASYNC_ACCEPT)

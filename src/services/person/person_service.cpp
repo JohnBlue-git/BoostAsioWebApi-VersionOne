@@ -1,22 +1,22 @@
 #include "person_service.hpp"
 
-std::vector<Person> PersonService::getPersons() {
-  return persons;
+std::vector<Person> PersonService::getPersons()
+{
+  return this->persons;
 }
 
-std::optional<Person> PersonService::getPersonById(unsigned int id) {
-  for (auto& person : persons)
+std::optional<Person> PersonService::getPersonById(unsigned int id)
+{
+  if (id + 1 > this->persons.size())
   {
-    if (person.getId() == id)
-    {
-      return person;
-    }
+    return std::nullopt;
   }
-  return std::nullopt;
+  return this->persons[id];
 }
 
-void PersonService::addPerson(const Person &person) {
-  persons.push_back(person);
+void PersonService::addPerson(const Person& person)
+{
+  this->persons.push_back(person);
 }
 
 //bool PersonService::putPerson(const Person &person, ...)
@@ -25,36 +25,33 @@ bool PersonService::patchPerson(unsigned int id,
                               std::optional<std::string> name,
                               std::optional<unsigned int> age)
 {
-  for (auto& person : persons)
+  if (id + 1 > this->persons.size())
   {
-    if (person.getId() == id)
-    {
-      if (name)
-      {
-        person.setName(name.value());
-      }
-      if (age)
-      {
-        person.setAge(age.value());
-      }
-      return true;
-    }
+    return false;
   }
-  return false;
+  auto& person = this->persons[id];
+  if (name)
+  {
+    person.setName(name.value());
+  }
+  if (age)
+  {
+    person.setAge(age.value());
+  }
+  return true;
 }
 
-void PersonService::deletePersons() {
-  persons.clear();
+void PersonService::deletePersons()
+{
+  this->persons.clear();
 }
 
-bool PersonService::deletePersonById(unsigned int id) {
-  for (auto it = persons.begin(); it != persons.end();) {
-    if (it->getId() == id) {
-      it = persons.erase(it);
-      return true;
-    } else {
-      ++it;
-    }
+bool PersonService::deletePersonById(unsigned int id)
+{
+  if (id + 1 > this->persons.size())
+  {
+    return false;
   }
-  return false;
+  this->persons.erase(persons.begin() + id);
+  return true;
 }

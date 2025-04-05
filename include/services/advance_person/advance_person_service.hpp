@@ -1,13 +1,14 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
 
 #include "../../models/person/person.hpp"
 #include "../interface_person_service.hpp"
 
-class PersonService : public IPersonService {
+class AdvancePersonService : public IPersonService {
 private:
-  std::vector<Person> persons;
+  unsigned int num_instances = 0;
+  std::unordered_map<unsigned int, Person> persons;
 
 public:
   std::vector<Person> getPersons() override;

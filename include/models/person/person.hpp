@@ -5,17 +5,25 @@
 
 class Person {
 private:
-  static unsigned int num_instances;
-  unsigned int id;
   std::string name;
   unsigned int age;
 
 public:
-  Person(std::string name, unsigned int age);
-  unsigned int getId() const;
+  Person() = default;
+  Person(const Person& copy) = default;
+  ~Person() {};
+  Person& operator=(const Person& assign) = default;
+  Person(Person&& other) = default;
+  Person& operator=(Person&& other) = default;
+public:
+  Person(std::string name, unsigned int age):
+    name(name),
+    age(age)
+    {};
+
+public:
   std::string getName() const;
   unsigned int getAge() const;
-public:
   void setName(std::string);
   void setAge(unsigned int);
 };

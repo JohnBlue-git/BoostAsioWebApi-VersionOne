@@ -26,6 +26,9 @@ include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/serializers/person
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services/person
   )
+include_directories(WebApi PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/services/advance_person
+  )
 # Source code
 file(GLOB SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp

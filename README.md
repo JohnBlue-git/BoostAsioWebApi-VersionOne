@@ -177,7 +177,7 @@ curl -X GET -H "Content-Type: application/json" http://localhost:1999/api/person
 # PUT (not yet)
 
 # PATCH (not yet)
-curl -X PATCH -H "Content-Type: application/json" -d '{"name": "John Blue", "age": 18}' http://localhost:1999/api/person -v
+curl -X PATCH -H "Content-Type: application/json" -d '{"name": "John Blue", "age": 18}' http://localhost:1999/api/person/0 -v
 
 # GET
 curl -X GET -H "Content-Type: application/json" http://localhost:1999/api/person/0 -v

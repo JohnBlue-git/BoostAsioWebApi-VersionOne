@@ -10,7 +10,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "John Doe", "age":
 
 # patch person
 # PATCH /api/person/{id}
-curl -X PATCH -H "Content-Type: application/json" -d '{"name": "John Blue", "age": 18}' http://localhost:1999/api/person -v
+curl -X PATCH -H "Content-Type: application/json" -d '{"name": "John Blue", "age": 18}' http://localhost:1999/api/person/0 -v
 
 # get all
 # GET /api/person

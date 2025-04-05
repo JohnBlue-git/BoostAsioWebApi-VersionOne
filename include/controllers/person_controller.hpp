@@ -13,11 +13,11 @@ public:
     AbstractController(),
     personService(service)
   {
-    method["GET"] = handleGet;
-    method["POST"] = handlePost;
+    method["GET"] = std::bind(&PersonController::handleGet, this, std::placeholders::_1);
+    method["POST"] = std::bind(&PersonController::handlePost, this, std::placeholders::_1);
     method["PUT"] = nullptr;
-    method["PATCH"] = nullptr;
-    method["DELETE"] = handleDelete;
+    method["PATCH"] = std::bind(&PersonController::handlePatch, this, std::placeholders::_1);
+    method["DELETE"] = std::bind(&PersonController::handleDelete, this, std::placeholders::_1);
   }
   virtual ~PersonController() {}
 public:
@@ -31,14 +31,13 @@ public:
 private:
   void handleGet(std::shared_ptr<Context> ctx);
   void handlePost(std::shared_ptr<Context> ctx);
-  void handlePut(std::shared_ptr<Context> ctx);
+  //void handlePut(std::shared_ptr<Context> ctx);
   void handlePatch(std::shared_ptr<Context> ctx);
   void handleDelete(std::shared_ptr<Context> ctx);
 
 private:
   void handleGetCollection(std::shared_ptr<Context> ctx);
   void handleGetById(std::shared_ptr<Context> ctx, int id);
-  //
   //
   void handleDeleteCollection(std::shared_ptr<Context> ctx);
   void handleDeleteById(std::shared_ptr<Context> ctx, int id);

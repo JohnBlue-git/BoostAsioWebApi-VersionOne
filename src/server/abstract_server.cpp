@@ -80,9 +80,7 @@ void AbstractServer::session(tcp::socket socket) {
       router->getController(path)->handleRequest(ctx);
     }
     else {
-      ctx.setJsonResponse(
-        http::status::not_found,
-        "{\"error\": \"Resource not found.\"}");
+      ctx->setJsonResponse(http::status::not_found, "{\"error\": \"Resource not found.\"}");
     }
 
     http::write(socket, res);

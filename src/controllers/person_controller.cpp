@@ -9,7 +9,7 @@ void PersonController::handleGetCollection(std::shared_ptr<Context> ctx)
   http::status status;
   std::string jsonStr;
 
-  auto persons = personService->getAllPersons();
+  auto persons = personService->getPersons();
 
 #ifdef BOOST_JSON
   boost::json::array jsonArray;
@@ -37,20 +37,20 @@ void PersonController::handleGetById(std::shared_ptr<Context> ctx, int id)
 
   auto person = personService->getPersonById(id);
 
-  if (std::nullopt == person)
+  if (person)
   {
-    status = http::status::not_found;
-    jsonStr = "{\"error\": \"Person not found.\"}";
-  }
-  else
-  {
-#ifdef BOOST_JSON
+    #ifdef BOOST_JSON
     status = http::status::ok;
     jsonStr = boost::json::serialize(PersonSerializer::toJson(person.value()));
 #else
     status = http::status::ok;
     jsonStr = PersonSerializer::toJson(person.value()).dump();
 #endif
+  }
+  else
+  {
+    status = http::status::not_found;
+    jsonStr = "{\"error\": \"Person not found.\"}";
   }
 
   ctx->setJsonResponse(status, jsonStr);
@@ -98,17 +98,17 @@ void PersonController::handlePost(std::shared_ptr<Context> ctx)
     auto json = nlohmann::json::parse(req.body());
     auto person = PersonSerializer::fromJson(json);
 #endif
-    if (std::nullopt == person)
+    if (person)
     {
-      status = http::status::bad_request;
-      jsonStr = "{\"error\": \"Invalid JSON payload.\"}";
-    }
-    else
-    {
-      personService->addPerson(person);
+      personService->addPerson(person.value());
 
       status = http::status::created;
       jsonStr = "{\"success\": \"Person created.\"}";
+    }
+    else
+    {
+      status = http::status::bad_request;
+      jsonStr = "{\"error\": \"Invalid JSON payload.\"}";
     }
   }
 
@@ -119,8 +119,8 @@ void PersonController::handlePost(std::shared_ptr<Context> ctx)
 // PUT
 //
 
-void PersonController::handlePut(std::shared_ptr<Context> ctx)
-{}
+//void PersonController::handlePut(std::shared_ptr<Context> ctx)
+//{}
 
 //
 // PATCH
@@ -140,22 +140,40 @@ void PersonController::handlePatch(std::shared_ptr<Context> ctx)
     std::optional<unsigned int> age;
 
 #ifdef BOOST_JSON
-    if (obj.if_contains("name"))
+    boost::json::value json;
+    try
     {
-      name = obj.at("name").as_string().c_str();
+      json = boost::json::parse(req.body());
     }
-    if (obj.if_contains("age"))
+    catch([[maybe_unused]] std::exception e)
     {
-      age = obj.at("age").as_int64();
+      // [[maybe_unused]]
+    }
+    if (json.if_contains("name"))
+    {
+      name = json.at("name").as_string().c_str();
+    }
+    if (json.if_contains("age"))
+    {
+      age = json.at("age").as_int64();
     }
 #else
-    if (obj.contains("name"))
+    nlohmann::json json;
+    try
     {
-      name = obj["name"];
+      json = nlohmann::json::parse(req.body());
     }
-    if (obj.contains("age"))
+    catch([[maybe_unused]] std::exception e)
     {
-      age = obj["age"];
+      // [[maybe_unused]]
+    }
+    if (json.contains("name"))
+    {
+      name = json["name"];
+    }
+    if (json.contains("age"))
+    {
+      age = json["age"];
     }
 #endif
 
@@ -189,7 +207,7 @@ void PersonController::handleDeleteCollection(std::shared_ptr<Context> ctx)
   std::string jsonStr;
 
   personService->deletePersons();
-  status = http::status::no_content
+  status = http::status::no_content;
   jsonStr = "";
 
   ctx->setJsonResponse(status, jsonStr);
@@ -202,12 +220,12 @@ void PersonController::handleDeleteById(std::shared_ptr<Context> ctx, int id)
 
   if (personService->deletePersonById(id))
   {
-    status = http::status::no_content
+    status = http::status::no_content;
     jsonStr = "";
   }
   else
   {
-    status = http::status::not_found
+    status = http::status::not_found;
     jsonStr = "{\"error\": \"Person not found.\"}";
   }
 

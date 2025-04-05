@@ -8,12 +8,14 @@ Before running the tests, ensure you have the following installed:
 
 Use pip
 ```sh
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
+# or
+sudo pip3 install -r requirements.txt
 ```
 
 When pip install package is not directly accessable (we have a script to install via python3-xyz)
 ```sh
-./install_with_python3-xyz.sh
+sudo ./install_with_python3-xyz.sh
 ```
 
 ## Running the Tests

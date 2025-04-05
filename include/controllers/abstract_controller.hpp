@@ -3,6 +3,9 @@
 #include "interface_controller.hpp"
 
 class AbstractController : public IController {
+protected:
+    std::unordered_map<std::string, std::function<void(std::shared_ptr<Context> ctx)>> method;
+
 public:
     AbstractController() {
         method["GET"] = nullptr;

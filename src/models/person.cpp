@@ -15,6 +15,6 @@ std::string Person::getName() const { return this->name; }
 
 unsigned int Person::getAge() const { return this->age; }
 
-void setName(std::string name) { this->name = name; }
+void Person::setName(std::string name) { this->name = name; }
 
-void setAge(unsigned int age) { this->age = age; }
+void Person::setAge(unsigned int age) { this->age = age; }

@@ -15,7 +15,7 @@ bool AbstractController::existsId(const http::request<http::string_body>& req, i
     }
     return false;
   }
-  catch(std::exception e)
+  catch([[maybe_unused]] std::exception e)
   {
     return false;
   }

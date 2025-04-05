@@ -45,7 +45,7 @@ def test_get_person_by_id_not_found():
     assert response.status_code == 404
 
 @pytest.mark.order(5)
-def test_post_person():
+def test_patch_person():
     url = f"{BASE_URL}{PERSON_API}/0"
     payload = {'name': 'John Blue', 'age': 18}
     headers = {'Content-Type': 'application/json'}

@@ -31,11 +31,11 @@ bool PersonService::patchPerson(unsigned int id,
     {
       if (name)
       {
-        person.setName(name);
+        person.setName(name.value());
       }
       if (age)
       {
-        person.setAge(age);
+        person.setAge(age.value());
       }
       return true;
     }

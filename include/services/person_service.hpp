@@ -11,7 +11,7 @@ public:
   virtual void addPerson(const Person &person) = 0;
   //virtual bool putPerson(unsigned int id, ...) = 0;
   virtual bool patchPerson(unsigned int id, std::optional<std::string> name, std::optional<unsigned int> age) = 0;
-  virtual bool deletePersons() = 0;
+  virtual void deletePersons() = 0;
   virtual bool deletePersonById(unsigned int id) = 0;
 };
 
@@ -25,6 +25,6 @@ public:
   void addPerson(const Person& person) override;
   //bool putPerson(unsigned int id, ...) override;
   bool patchPerson(unsigned int id, std::optional<std::string> name, std::optional<unsigned int> age) override;
-  bool deletePersons() override;
+  void deletePersons() override;
   bool deletePersonById(unsigned int id) override;
 };

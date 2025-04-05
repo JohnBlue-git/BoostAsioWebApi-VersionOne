@@ -99,7 +99,6 @@ rm -rf * && cmake -DUSE_ASYNC_ACCEPT=ON .. && make
 
 # build block accept server
 rm -rf * && cmake -DUSE_BLOCK_ACCEPT=ON .. && make
-
 ```
 
 ### Build with meson
@@ -148,7 +147,9 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "John Doe", "age":
 curl -X GET -H "Content-Type: application/json" http://localhost:1999/api/person -v
 
 # PUT (not yet)
-#curl -X PUT -H "Content-Type: application/json" -d '{"name": "John Doe", "age": 30}' http://localhost:1999/api/person -v
+
+# PATCH (not yet)
+curl -X PATCH -H "Content-Type: application/json" -d '{"name": "John Blue", "age": 18}' http://localhost:1999/api/person -v
 
 # GET
 curl -X GET -H "Content-Type: application/json" http://localhost:1999/api/person/0 -v

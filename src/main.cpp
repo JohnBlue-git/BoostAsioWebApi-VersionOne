@@ -35,7 +35,8 @@ sem_t Fence::semaphore; // Initialize static member
 // Main
 //
 
-int main(void) {
+int main(void)
+{
   try {
     // Crear services
     auto personService = std::make_shared<PersonService>();

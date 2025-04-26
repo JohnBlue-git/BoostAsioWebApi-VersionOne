@@ -32,6 +32,8 @@ public:
 
   void setFileResponse(const http::status& status, const std::string& body, const std::string& file);
 
+  void setTarballResponse(const http::status& status, const std::string& body, const std::string& file);
+
   // Add more functionality as needed, such as setting headers,
   // etc. For example, a helper function to easily set the request body
   //void setJsonRequest( ? , const std::string &body) = delete;

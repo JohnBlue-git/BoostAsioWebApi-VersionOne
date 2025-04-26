@@ -20,6 +20,11 @@ void Context::setFileResponse(const http::status& status, const std::string& bod
   setResponse(status, body, "application/octet-stream");
 }
 
+void Context::setTarballResponse(const http::status& status, const std::string& body, const std::string& file) {
+  response.set(http::field::content_disposition, "attachment; filename=\"" + file + "\"");
+  setResponse(status, body, "application/x-tar");
+}
+
 //void Context::setJsonRequest( ? , const std::string &body) {}
 
 /*

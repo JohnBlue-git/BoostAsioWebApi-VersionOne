@@ -15,6 +15,9 @@
 #include "file_service.hpp"
 #include "file_controller.hpp"
 
+#include "tarball_service.hpp"
+#include "tarball_controller.hpp"
+
 //
 // Fence
 //
@@ -53,6 +56,9 @@ int main(void)
     //
     auto fileService= std::make_shared<FileService>();
     auto fileController = std::make_shared<FileController>(fileService);
+    //
+    auto tarballService= std::make_shared<TarballService>();
+    auto tarballController = std::make_shared<TarballController>(tarballService);
     
     // Register routing
     auto router = std::make_shared<Router>();
@@ -62,6 +68,8 @@ int main(void)
     router->addRoute("/api/advance_person", advance_personController);
     //
     router->addRoute("/api/file", fileController);
+    //
+    router->addRoute("/api/tarball", tarballController);
 
     // Create server
 #if defined(ASYNC_ACCEPT)

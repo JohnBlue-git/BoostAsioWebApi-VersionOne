@@ -26,7 +26,11 @@ public:
 
   // Add more functionality as needed, such as setting response status, headers,
   // etc. For example, a helper function to easily set the response result and body
-  void setJsonResponse(const http::status& status, const std::string& body, std::string contentType = "application/json");
+  void setResponse(const http::status& status, const std::string& body, const std::string& contentType);
+
+  void setJsonResponse(const http::status& status, const std::string& body);
+
+  void setFileResponse(const http::status& status, const std::string& body, const std::string& file);
 
   // Add more functionality as needed, such as setting headers,
   // etc. For example, a helper function to easily set the request body

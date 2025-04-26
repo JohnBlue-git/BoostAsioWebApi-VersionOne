@@ -47,9 +47,15 @@ void AbstractController::handleRequest(std::shared_ptr<Context> ctx)
         ctx->setJsonResponse(
           http::status::not_found,
           "{\"error\": \"Method not support.\"}");
+        return;
     }
-    if (callback)
+    if (!callback)
     {
-      callback(ctx);
+      // shall replace with correct status code
+      ctx->setJsonResponse(
+        http::status::not_found,
+        "{\"error\": \"Method not support.\"}");
+      return;
     }
+    callback(ctx);
 }

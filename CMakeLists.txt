@@ -20,14 +20,22 @@ include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/serializers
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services
   )
+#
 include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers/person
   ${CMAKE_CURRENT_SOURCE_DIR}/include/models/person
   ${CMAKE_CURRENT_SOURCE_DIR}/include/serializers/person
+  )
+include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services/person
   )
 include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services/advance_person
+  )
+#
+include_directories(WebApi PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers/file
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/services/file
   )
 # Source code
 file(GLOB SOURCES

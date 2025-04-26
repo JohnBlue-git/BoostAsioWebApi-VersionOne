@@ -12,6 +12,9 @@
 #include "advance_person_service.hpp"
 #include "person_controller.hpp"
 
+#include "file_service.hpp"
+#include "file_controller.hpp"
+
 //
 // Fence
 //
@@ -47,6 +50,9 @@ int main(void)
     //
     auto advance_personService = std::make_shared<AdvancePersonService>();
     auto advance_personController = std::make_shared<PersonController>(advance_personService);
+    //
+    auto fileService= std::make_shared<FileService>();
+    auto fileController = std::make_shared<FileController>(fileService);
     
     // Register routing
     auto router = std::make_shared<Router>();
@@ -54,6 +60,8 @@ int main(void)
     router->addRoute("/api/person", personController);
     //
     router->addRoute("/api/advance_person", advance_personController);
+    //
+    router->addRoute("/api/file", fileController);
 
     // Create server
 #if defined(ASYNC_ACCEPT)

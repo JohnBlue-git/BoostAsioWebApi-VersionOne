@@ -26,14 +26,22 @@ inc_dir = include_directories(
   'include/models',
   'include/serializers'
 )
-inc_dir = include_directories(
+#
+inc_dir += include_directories(
   'include/controllers/person',
-  'include/services/person',
   'include/models/person',
   'include/serializers/person'
 )
-inc_dir = include_directories(
+inc_dir += include_directories(
+  'include/services/person',
+)
+inc_dir += include_directories(
   'include/services/advance_person',
+)
+#
+inc_dir += include_directories(
+  'include/controllers/file',
+  'include/services/file',
 )
 
 # Source files

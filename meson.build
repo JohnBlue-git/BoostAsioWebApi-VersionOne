@@ -43,6 +43,16 @@ inc_dir += include_directories(
   'include/controllers/file',
   'include/services/file',
 )
+#
+inc_dir += include_directories(
+  'include/controllers/tarball',
+  'include/services/tarball',
+)
+#
+inc_dir += include_directories(
+  'include/controllers/tarball_gzip',
+  'include/services/tarball_gzip',
+)
 
 # Source files
 # Use glob to find all .cpp files recursively

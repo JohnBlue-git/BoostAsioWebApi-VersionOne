@@ -18,6 +18,9 @@
 #include "tarball_service.hpp"
 #include "tarball_controller.hpp"
 
+#include "tarball_gzip_service.hpp"
+#include "tarball_gzip_controller.hpp"
+
 //
 // Fence
 //
@@ -59,6 +62,9 @@ int main(void)
     //
     auto tarballService= std::make_shared<TarballService>();
     auto tarballController = std::make_shared<TarballController>(tarballService);
+    //
+    auto tarballGzipService= std::make_shared<TarballGzipService>();
+    auto tarballGzipController = std::make_shared<TarballGzipController>(tarballGzipService);
     
     // Register routing
     auto router = std::make_shared<Router>();
@@ -70,6 +76,8 @@ int main(void)
     router->addRoute("/api/file", fileController);
     //
     router->addRoute("/api/tarball", tarballController);
+    //
+    router->addRoute("/api/tarball_gzip", tarballGzipController);
 
     // Create server
 #if defined(ASYNC_ACCEPT)

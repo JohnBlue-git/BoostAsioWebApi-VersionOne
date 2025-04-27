@@ -42,6 +42,10 @@ include_directories(WebApi PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers/tarball
   ${CMAKE_CURRENT_SOURCE_DIR}/include/services/tarball
   )
+include_directories(WebApi PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/controllers/tarball_gzip
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/services/tarball_gzip
+  )
 # Source code
 file(GLOB SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp

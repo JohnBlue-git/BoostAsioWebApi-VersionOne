@@ -19,9 +19,11 @@ bool TarballService::createTarball()
 {
   std::string cmdStr = "tar -cpvf " + this->getTmpTarballName() + " -C " + this->folder + " " + this->fileName;
   int ret = std::system(cmdStr.c_str());
-  return ret == -1 ? false : true;
+  return ret == 0 ? true : false;
 }
 
+// How to check is format .tar
+// ref: https://stackoverflow.com/questions/32180215/how-to-check-whether-a-file-is-in-tar-format
 bool TarballService::isTarball(const std::string& body)
 {
   // The minimum size of a tar file is 512 bytes because this is the size of a single tar header block.
@@ -49,7 +51,8 @@ bool TarballService::extarctTarball()
 {
   std::string cmdStr = "tar -xpvf " + this->getTmpTarballName() + " -C " + this->tmpFolder;
   int ret = std::system(cmdStr.c_str());
-  return ret == -1 ? false : true;
+  // ret == 0 ? true : false;
+  return WIFEXITED(ret);
 }
 
 std::string TarballService::getTarball()
@@ -65,5 +68,6 @@ std::string TarballService::getTarball()
 bool TarballService::deleteTmpFolder()
 {
   int ret = std::system("rm -rf ../files/tmp/*");
-  return ret == -1 ? false : true;
+  // ret == 0 ? true : false;
+  return WIFEXITED(ret);
 }

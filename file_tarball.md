@@ -19,3 +19,14 @@ curl -X POST http://localhost:1999/api/tarball -H "Content-Type: application/x-t
 # delete tmp folder (rm -rf ../files/tmp/*)
 curl -X DELETE http://localhost:1999/api/tarball -v
 ```
+tarball gzip
+```console
+# get tarball
+curl -X GET http://localhost:1999/api/tarball_gzip -o data.tar.gz -v
+
+# post tarball and extarct to tmp folder
+curl -X POST http://localhost:1999/api/tarball_gzip -H "Content-Type: application/x-tar" --data-binary @data.tar.gz -v
+
+# delete tmp folder (rm -rf ../files/tmp/*)
+curl -X DELETE http://localhost:1999/api/tarball_gzip -v
+```

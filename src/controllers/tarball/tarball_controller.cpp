@@ -9,11 +9,12 @@ void TarballController::handleGet(std::shared_ptr<Context> ctx)
   http::status status;
   std::string jsonStr;
 
-  if (!tarballService->tmpFile()) {
+  std::ifstream ifs(tarballService->getFileName(),
+    std::ios::in | std::ios::binary);
+  if (!ifs.is_open()) {
     status = http::status::internal_server_error;
-    jsonStr = "{\"error\": \"Failed to open file " + tarballService->getTmpFileName() + " for writing\"}";
+    jsonStr = "{\"error\": \"Failed to open file " + tarballService->getTmpFileName() + " \"}";
     ctx->setJsonResponse(status, jsonStr);
-    return;
   }
   if (!tarballService->createTarball()) {
     status = http::status::internal_server_error;
@@ -48,7 +49,7 @@ void TarballController::handlePost(std::shared_ptr<Context> ctx)
 
   if (!tarballService->isTarball(body)) {
     status = http::status::unsupported_media_type;
-    jsonStr = "{\"error\": \"Unsupported media type\"}";
+    jsonStr = "{\"error\": \"Unsupported media type, should be .tar\"}";
     ctx->setJsonResponse(status, jsonStr);
     return;
   }
@@ -91,7 +92,7 @@ void TarballController::handleDelete(std::shared_ptr<Context> ctx)
   http::status status;
   std::string jsonStr;
 
-  if (!tarballService->deleteTarball()) {
+  if (!tarballService->deleteTmpFolder()) {
     status = http::status::internal_server_error;
     jsonStr = "{\"error\": \"Error occurred while calling system() with rm\"}";
     ctx->setJsonResponse(status, jsonStr);

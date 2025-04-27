@@ -2,40 +2,22 @@
 
 std::string TarballService::getFileName()
 {
-  return this->fileName;
+  return this->folder + "/" + this->fileName;
 }
 
 std::string TarballService::getTmpFileName()
 {
-  return this->tmpFileName;
+  return this->tmpFolder + "/" + this->fileName;
 }
 
 std::string TarballService::getTmpTarballName()
 {
-  return this->tmpTarballName;
-}
-
-bool TarballService::tmpFile()
-{
-  std::ifstream ifs(this->getFileName(),
-    std::ios::in | std::ios::binary);
-  if (!ifs.is_open()) {
-    return false;
-  }
-  std::ofstream ofs(this->getTmpFileName(),
-      std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
-  if (!ofs.is_open()) {
-      return false;
-  }
-  ofs << std::string(std::istreambuf_iterator<char>{ifs}, {});
-  ofs.close();
-  ifs.close();
-  return true;
+  return this->tmpFolder + "/" + this->tarballName;
 }
 
 bool TarballService::createTarball()
 {
-  std::string cmdStr = "tar -cpvf " + this->getTmpTarballName() + " " + this->getTmpFileName();
+  std::string cmdStr = "tar -cpvf " + this->getTmpTarballName() + " -C " + this->folder + " " + this->fileName;
   int ret = std::system(cmdStr.c_str());
   return ret == -1 ? false : true;
 }
@@ -65,7 +47,7 @@ bool TarballService::tmpTarball(const std::string& body)
 
 bool TarballService::extarctTarball()
 {
-  std::string cmdStr = "tar -xpvf " + this->getTmpFileName() + " -C " + this->getTmpTarballName();
+  std::string cmdStr = "tar -xpvf " + this->getTmpTarballName() + " -C " + this->tmpFolder;
   int ret = std::system(cmdStr.c_str());
   return ret == -1 ? false : true;
 }
@@ -80,7 +62,7 @@ std::string TarballService::getTarball()
   return std::string(std::istreambuf_iterator<char>{ifs}, {});
 }
 
-bool TarballService::deleteTarball()
+bool TarballService::deleteTmpFolder()
 {
   int ret = std::system("rm -rf ../files/tmp/*");
   return ret == -1 ? false : true;

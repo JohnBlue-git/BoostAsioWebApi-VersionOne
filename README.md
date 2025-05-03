@@ -11,22 +11,30 @@ There is a Version Zero on my github. The Version Zero remains the original code
 
 ### Tree view
 ```console
+tree
 ├── CMakeLists.txt
-├── PERSON.md
 ├── README.md
 ├── doc
 │   ├── webapi_project.drawio
 │   └── webapi_project.png
+├── file_tarball.md
+├── files
+│   ├── data.json
+│   └── tmp
 ├── include
 │   ├── context.hpp
 │   ├── controllers
 │   │   ├── abstract_controller.hpp
+│   │   ├── file
+│   │   │   └── file_controller.hpp
 │   │   ├── interface_controller.hpp
-│   │   ├── ... other service's controller ...
-│   │   └── person
-│   │       └── person_controller.hpp
+│   │   ├── person
+│   │   │   └── person_controller.hpp
+│   │   ├── tarball
+│   │   │   └── tarball_controller.hpp
+│   │   └── tarball_gzip
+│   │       └── tarball_gzip_controller.hpp
 │   ├── models
-│   │   ├── ... other service's model ...
 │   │   └── person
 │   │       └── person.hpp
 │   ├── router.hpp
@@ -34,7 +42,6 @@ There is a Version Zero on my github. The Version Zero remains the original code
 │   │   ├── nlohmann
 │   │   │   ├── json.hpp
 │   │   │   └── json_fwd.hpp
-│   │   ├── ... other service's serilizer ...
 │   │   └── person
 │   │       └── person_serializer.hpp
 │   ├── server
@@ -43,26 +50,38 @@ There is a Version Zero on my github. The Version Zero remains the original code
 │   │   ├── block_accept_server.hpp
 │   │   └── interface_server.hpp
 │   └── services
-│   │   ├── ... other service's service ...
-│       └── person
-│           └── person_service.hpp
+│       ├── advance_person
+│       │   └── advance_person_service.hpp
+│       ├── file
+│       │   └── file_service.hpp
+│       ├── interface_person_service.hpp
+│       ├── person
+│       │   └── person_service.hpp
+│       ├── tarball
+│       │   └── tarball_service.hpp
+│       └── tarball_gzip
+│           └── tarball_gzip_service.hpp
 ├── meson.build
 ├── meson.options
+├── person.md
 ├── src
 │   ├── context.cpp
 │   ├── controllers
 │   │   ├── abstract_controller.cpp
-│   │   ├── ... other service's controller ...
-│   │   └── person
-│   │       └── person_controller.cpp
+│   │   ├── file
+│   │   │   └── file_controller.cpp
+│   │   ├── person
+│   │   │   └── person_controller.cpp
+│   │   ├── tarball
+│   │   │   └── tarball_controller.cpp
+│   │   └── tarball_gzip
+│   │       └── tarball_gzip_controller.cpp
 │   ├── main.cpp
 │   ├── models
-│   │   ├── ... other service's model ...
 │   │   └── person
 │   │       └── person.cpp
 │   ├── router.cpp
 │   ├── serializers
-│   │   ├── ... other service's serilizer ...
 │   │   └── person
 │   │       └── person_serializer.cpp
 │   ├── server
@@ -70,15 +89,22 @@ There is a Version Zero on my github. The Version Zero remains the original code
 │   │   ├── async_accept_server.cpp
 │   │   └── block_accept_server.cpp
 │   └── services
-│   │   ├── ... other service's service ...
-│       └── person
-│           └── person_service.cpp
+│       ├── advance_person
+│       │   └── advance_person_service.cpp
+│       ├── file
+│       │   └── file_service.cpp
+│       ├── person
+│       │   └── person_service.cpp
+│       ├── tarball
+│       │   └── tarball_service.cpp
+│       └── tarball_gzip
+│           └── tarball_gzip_service.cpp
 └── tests
     ├── README.md
-    ├── __pycache__
-    │   └── test_api_person.cpython-312-pytest-8.3.5.pyc
     ├── install_with_python3-xyz.sh
     ├── requirements.txt
+    ├── test_api_advance_person.py
+    ├── test_api_file.py
     └── test_api_person.py
 ```
 
@@ -153,8 +179,8 @@ ninja
 ## Tests
 
 ### Test via pytest
-We have provide e2e tests via python scripts \
-(please refer to the follwing README.md and navigate to tests folder) \
+We have provide e2e tests via python scripts (please refer to the follwing README.md and navigate to tests folder)
+\
 [tests/README.md](tests/README.md)
 
 ### Test via curl:
@@ -185,6 +211,32 @@ curl -X GET -H "Content-Type: application/json" http://localhost:1999/api/person
 # DELETE
 curl -X DELETE -H "Content-Type: application/json" http://localhost:1999/api/person/0 -v
 ```
+
+## Look deeper into desgin of block server VS async server
+Below is some summary, and please refer to the follwing README.md for more detail.
+\
+[server.md](server.md)
+\
+Feature Comparison: Sync vs Async Code
+
+| Feature                   | Your Code (Sync)     | Recommended (Async)    |
+|---------------------------|----------------------|-------------------------|
+| **Blocking `accept()`?** | ✅ Yes               | ❌ No                  |
+| **Scalable?**             | ❌ No (too many threads) | ✅ Yes (event-driven) |
+| **Uses `io_context.run()`?** | ❌ No            | ✅ Yes                 |
+| **Detaching threads?**    | ✅ Yes               | 🚫 Risky / unscalable |
+| **Suitable for production?** | ❌ Limited use cases | ✅ Yes               |
+
+> ✅ = Good / Present  
+> ❌ = Not recommended / Absent  
+> 🚫 = Risky or discouraged
+
+---
+
+Summary
+- The **synchronous approach** is simple and easier to understand but does not scale well due to thread overhead and lack of event-driven mechanisms.
+- The **asynchronous (recommended)** model is scalable, leverages `io_context.run()`, avoids detached threads, and is suited for production environments.
+
 
 ## Another simple web api version via C++ and boost library (if the code in this project is too complex)
 client command
